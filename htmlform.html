@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe to SaaS Service</title>
+</head>
+<body>
+    <h2>Subscribe to SaaS Service</h2>
+    <form id="subscribe-form">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="plan">Subscription Plan:</label><br>
+        <select id="plan" name="subscription_plan" required>
+            <option value="Basic">Basic</option>
+            <option value="Pro">Pro</option>
+            <option value="Enterprise">Enterprise</option>
+        </select><br><br>
+        
+        <button type="submit">Subscribe</button>
+    </form>
+
+    <p id="response-message"></p>
+
+    <script>
+        document.getElementById("subscribe-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const subscription_plan = document.getElementById("plan").value;
+
+            const response = await fetch("/subscribe", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, email, subscription_plan })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById("response-message").textContent = "Subscription created successfully!";
+            } else {
+                document.getElementById("response-message").textContent = result.error || "Subscription failed!";
+            }
+        });
+    </script>
+</body>
+</html>
